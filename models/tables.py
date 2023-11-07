@@ -10,3 +10,10 @@ class User(BaseTable):
     fname=Column(String)
     lname=Column(String)
 
+class Course(BaseTable):
+    __tablename__="courses"
+    courseName=Column(String)
+    courseCode=Column(String)
+    courseID=Column(String, primary_key=True)
+    courseNickName=Column(String)
+
