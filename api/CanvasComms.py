@@ -73,3 +73,30 @@ result = courses_df.to_string(
 )
 print(result)
 
+# List to store assignments from specified courses
+assignments = []
+
+# Iterate over the filtered courses
+for course in specific_course_ids:
+    # Make a request to get assignments for the current course
+    assignments_url = BASE_URL + f'/api/v1/courses/{course["id"]}/assignments'
+    assignments_params = {"per_page": str(PER_PAGE)}
+    assignments_request = requests.get(assignments_url, headers=auth_header, params=assignments_params)
+    assignments_request.raise_for_status()
+    
+    # Add assignments to the list
+    assignments += assignments_request.json()
+
+# ...
+
+# Print the assignments
+if assignments:
+    assignments_df = pd.DataFrame(assignments)
+    assignments_result = assignments_df.to_string(
+        columns=['id', 'name', 'due_at', 'points_possible']
+    )
+    print("Assignments:")
+    print("-----------------------------")
+    print(assignments_result)
+else:
+    print("No assignments found.")
