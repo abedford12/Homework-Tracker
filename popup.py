@@ -83,6 +83,7 @@ def collect_user_info():
 
     def submit():
         # Function to collect and process the submitted data
+        # TODO: MOVE CRN AND TOKEN DATA TO BACKEND UPON SUBMISSION
         canvas_token = canvas_token_entry.get()
         num_courses = int(num_courses_var.get())
         crns = [entry.get() for entry in crn_entries]
