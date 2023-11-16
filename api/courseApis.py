@@ -34,13 +34,13 @@ async def listAllCourses(session: Session=Depends(get_db)):
 #API that gets a course based off their course id
 @router.get("/{course_id}", response_model=courseResponse)
 async def getCourse(course_id: int, session: Session = Depends(get_db)):
-    course = session.query(Course).filter(Course.id == course_id).first()
+    course = session.query(Course).filter(Course.courseID == course_id).first()
     if course is None:
         raise HTTPException(status_code=404, detail="Course not found")
     return course
 
 #API that creates a new course for the database
-@router.post("/{create_course}", response_model=courseResponse)
+@router.post("/{create_course}", response_model=courseCreate)
 async def createCourse(course: courseCreate, session: Session = Depends(get_db)):
     newCourse = Course(**course.dict())
     session.add(newCourse)
@@ -52,7 +52,7 @@ async def createCourse(course: courseCreate, session: Session = Depends(get_db))
 @router.delete("/{course_id}", response_model=str)
 async def deleteCourse(course_id: int, session: Session = Depends(get_db)):
     # Retrieve the Trip object by its ID
-    courseDelete = session.query(Course).filter(Course.id == course_id).first()
+    courseDelete = session.query(Course).filter(Course.courseID == course_id).first()
     if courseDelete:
         # Delete the Trip object
         session.delete(courseDelete)

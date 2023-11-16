@@ -16,6 +16,8 @@ class Course(BaseTable):
     __tablename__="courses"
     courseID=Column(Integer, primary_key=True, index=True)
     courseName= Column(String)
+    profFName=Column(String)
+    profLName=Column(String)
     crn=Column(Integer)
     uid = Column(Integer) #, ForeignKey('users.uid'))
     #user = relationship('User', back_populates='courses')

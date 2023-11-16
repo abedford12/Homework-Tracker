@@ -36,14 +36,14 @@ async def listAllAssignments(session: Session = Depends(get_db)):
 # API that gets a assignment based off their assignment id
 @router.get("/{assignment_id}", response_model=assignmentResponse)
 async def getAssignment(assignment_id: int, session: Session = Depends(get_db)):
-    assignment = session.query(Assignment).filter(Assignment.id == assignment_id).first()
+    assignment = session.query(Assignment).filter(Assignment.assignmentID == assignment_id).first()
     if assignment is None:
         raise HTTPException(status_code=404, detail="Assignment not found")
     return assignment
 
 
 # API that creates a new assignment for the database
-@router.post("/{create_assignment}", response_model=assignmentResponse)
+@router.post("/{create_assignment}", response_model=assignmentCreate)
 async def createAssignment(assignment: assignmentCreate, session: Session = Depends(get_db)):
     newAssignment = Assignment(**assignment.dict())
     session.add(newAssignment)
@@ -56,7 +56,7 @@ async def createAssignment(assignment: assignmentCreate, session: Session = Depe
 @router.delete("/{assignment_id}", response_model=str)
 async def deleteCourse(assignment_id: int, session: Session = Depends(get_db)):
     # Retrieve the Trip object by its ID
-    assignmentDelete = session.query(Assignment).filter(Assignment.id == assignment_id).first()
+    assignmentDelete = session.query(Assignment).filter(Assignment.assignmentID == assignment_id).first()
     if assignmentDelete:
         # Delete the Trip object
         session.delete(assignmentDelete)

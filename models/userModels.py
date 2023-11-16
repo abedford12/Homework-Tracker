@@ -18,17 +18,17 @@ class userCreate(BaseModel):
 class courseResponse(BaseModel):
     courseID: int
     courseName: str
-    crn: int
     profFName: str
     profLName: str
+    crn: int
     uid: int
 
 
 class courseCreate(BaseModel):
     courseName: str
-    crn: int
     profFName: str
     profLName: str
+    crn: int
     uid: int
 
 

@@ -35,7 +35,7 @@ async def listAllUsers(session: Session = Depends(get_db)):
 # API that gets a user based off their user id
 @router.get("/{user_id}", response_model=userResponse)
 async def getUser(user_id: int, session: Session = Depends(get_db)):
-    user = session.query(User).filter(User.id == user_id).first()
+    user = session.query(User).filter(User.uid == user_id).first()
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -54,7 +54,7 @@ async def createUser(user: userCreate, session: Session = Depends(get_db)):
 @router.delete("/{user_id}", response_model=str)
 async def deleteUser(user_id: int, session: Session = Depends(get_db)):
     # Retrieve the Trip object by its ID
-    userToDelete = session.query(User).filter(User.id == user_id).first()
+    userToDelete = session.query(User).filter(User.uid == user_id).first()
     if userToDelete:
         # Delete the Trip object
         session.delete(userToDelete)
