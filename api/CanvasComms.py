@@ -74,12 +74,14 @@ result = courses_df.to_string(
 print(result)
 
 # List to store assignments from specified courses
+# List to store assignments from specified courses
 assignments = []
+count = 0
 
 # Iterate over the filtered courses
 for course in specific_course_ids:
     # Make a request to get assignments for the current course
-    assignments_url = BASE_URL + f'/api/v1/courses/{course["id"]}/assignments'
+    assignments_url = BASE_URL + f'/api/v1/courses/{specific_course_ids[count]}/assignments'
     assignments_params = {"per_page": str(PER_PAGE)}
     assignments_request = requests.get(assignments_url, headers=auth_header, params=assignments_params)
     assignments_request.raise_for_status()
