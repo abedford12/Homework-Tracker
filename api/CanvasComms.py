@@ -87,18 +87,19 @@ for course in specific_course_ids:
     assignments_request.raise_for_status()
     
     # Add assignments to the list
-    assignments += assignments_request.json()
+    assignments = assignments_request.json()
+    
+    # Print the assignments
+    if assignments:
+        assignments_df = pd.DataFrame(assignments)
+        assignments_result = assignments_df.to_string(
+            columns=['id', 'name', 'due_at', 'points_possible']
+        )
+        print(f"Assignments for {specific_course_ids[count]}:")
+        print("-----------------------------")
+        print(assignments_result)
+        print("\n")
+    else:
+        print("No assignments found.")
 
-# ...
-
-# Print the assignments
-if assignments:
-    assignments_df = pd.DataFrame(assignments)
-    assignments_result = assignments_df.to_string(
-        columns=['id', 'name', 'due_at', 'points_possible']
-    )
-    print("Assignments:")
-    print("-----------------------------")
-    print(assignments_result)
-else:
-    print("No assignments found.")
+    count = count + 1
