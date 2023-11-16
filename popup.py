@@ -4,7 +4,7 @@ def collect_user_info():
     root = tk.Tk()
     root.title("User Information Collection")
 
-    # Declare submit_button, reset_button, and submit as global variables
+    # Declare submit_button, reset_button, and submit as global vars
     global submit_button
     global reset_button
     global submit
@@ -52,7 +52,7 @@ def collect_user_info():
         # Pack the submit button after the CRN entry fields
         submit_button.pack(side=tk.TOP, anchor=tk.CENTER, pady=5)
 
-    # Canvas Instructions
+    # Canvas Instructions text
     instructions_text = """
     Steps for accessing Canvas API:
     1) In Canvas, go to Account -> Settings.
@@ -86,6 +86,7 @@ def collect_user_info():
         canvas_token = canvas_token_entry.get()
         num_courses = int(num_courses_var.get())
         crns = [entry.get() for entry in crn_entries]
+        root.destroy()   # Closes window upon entry
 
         # Perform actions with the collected data (e.g., store in a database)
         print("Canvas Token:", canvas_token)
