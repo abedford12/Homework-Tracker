@@ -19,8 +19,9 @@ class Course(BaseTable):
     profFName=Column(String)
     profLName=Column(String)
     crn=Column(Integer)
-    uid = Column(Integer) #, ForeignKey('users.uid'))
-    #user = relationship('User', back_populates='courses')
+    uid = Column(Integer, ForeignKey('users.uid'))
+    user = relationship('User', back_populates='courses')
+
 
 class Assignment(BaseTable):
     __tablename__="assignments"
@@ -28,6 +29,6 @@ class Assignment(BaseTable):
     title= Column(String)
     description= Column(String)
     dueDate = Column(DateTime)
-    courseID=Column(Integer) #, ForeignKey('courses.courseID'))
-    #course= relationship('Course', back_populate='assignments')
+    courseID=Column(Integer, ForeignKey('courses.courseID'))
+    course= relationship('Course', back_populates='assignments')
 
