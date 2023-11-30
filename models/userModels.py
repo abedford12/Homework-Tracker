@@ -8,7 +8,6 @@ class userResponse(BaseModel):
     canvasAccessToken: str
     googleCalendarAccessToken: str
 
-
 class userCreate(BaseModel):
     username: str
     canvasAccessToken: str
@@ -20,7 +19,7 @@ class courseResponse(BaseModel):
     courseName: str
     profFName: str
     profLName: str
-    crn: int
+    crn: str
     uid: int
 
 
@@ -28,7 +27,7 @@ class courseCreate(BaseModel):
     courseName: str
     profFName: str
     profLName: str
-    crn: int
+    crn: str
     uid: int
 
 

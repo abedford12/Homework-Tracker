@@ -40,7 +40,7 @@ async def getCourse(course_id: int, session: Session = Depends(get_db)):
     return course
 
 #API that creates a new course for the database
-@router.post("/{create_course}", response_model=courseCreate)
+@router.post("/create/{create_course}", response_model=courseCreate)
 async def createCourse(course: courseCreate, session: Session = Depends(get_db)):
     newCourse = Course(**course.dict())
     session.add(newCourse)

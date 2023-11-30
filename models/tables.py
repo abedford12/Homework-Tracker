@@ -11,6 +11,7 @@ class User(BaseTable):
     username = Column(String)
     canvasAccessToken = Column(String)
     googleCalendarAccessToken = Column(String)
+    #courses = relationship('Course', back_populates='user')
 
 class Course(BaseTable):
     __tablename__="courses"
@@ -18,9 +19,9 @@ class Course(BaseTable):
     courseName= Column(String)
     profFName=Column(String)
     profLName=Column(String)
-    crn=Column(Integer)
-    uid = Column(Integer, ForeignKey('users.uid'))
-    user = relationship('User', back_populates='courses')
+    crn=Column(String)
+    uid = Column(Integer)#, ForeignKey('users.uid'))
+    #user = relationship('User', back_populates='courses')
 
 
 class Assignment(BaseTable):
@@ -29,6 +30,6 @@ class Assignment(BaseTable):
     title= Column(String)
     description= Column(String)
     dueDate = Column(DateTime)
-    courseID=Column(Integer, ForeignKey('courses.courseID'))
-    course= relationship('Course', back_populates='assignments')
+    courseID=Column(Integer)# ForeignKey('courses.courseID'))
+    #course= relationship('Course', back_populates='assignments')
 
