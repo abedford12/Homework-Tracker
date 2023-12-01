@@ -7,6 +7,10 @@ import getpass
 import requests
 import pandas as pd
 from builtins import input
+from datetime import datetime, timedelta
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 # Static settings
 # Using a base urls is useful for switching between test and production environments easily
@@ -26,6 +30,30 @@ enrollment_state = 'active'
 start_date = '2023-01-01T00:00:00Z'
 #while not course_state in ['unpublished', 'available', 'completed', 'deleted']:
     #course_state = input("Select a course state [unpublished, available, completed, deleted]:")
+
+# Your Google Calendar API setup
+scopes = ['https://www.googleapis.com/auth/calendar']
+flow = InstalledAppFlow.from_client_secrets_file('<secret token file name>', scopes=scopes)
+credentials = flow.run_local_server(port=8080)
+service = build('calendar', 'v3', credentials='<secret token file name>')
+
+# Google Calendar ID (replace with your own calendar ID)
+calendar_id = 'primary'
+
+# Function to create a Google Calendar event
+def create_event(service, calendar_id, summary, due_date):
+    event = {
+        'summary': summary,
+        'description': 'Assignment Due',
+        'start': {
+            'dateTime': due_date.isoformat(),
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': (due_date + timedelta(hours=1)).isoformat(),
+            'timeZone': 'UTC',
+        },
+    }
 
 
 print("Finding courses...")
