@@ -19,7 +19,7 @@ PER_PAGE = 100
 
 # User input settings
 # token should be treated as a password (not visible when typed)
-token = '<YOUR INDIVIDUAL TOKEN>'
+token = '9605~UEXFdzx0ntDdmzvS48S5rPeQvQcTpUZAQoKVWDlOl44NhxCtKpyseQZ54myEUsE3'
 while not token:
     token = getpass.getpass('Enter your access token:')
 auth_header = {'Authorization': 'Bearer ' + token} # setup the authorization header to be used later
@@ -32,10 +32,13 @@ start_date = '2023-01-01T00:00:00Z'
     #course_state = input("Select a course state [unpublished, available, completed, deleted]:")
 
 # Your Google Calendar API setup
+json_key_path = '/Users/benutter/Downloads/client_secret_917639123664-80d60u1gg7dtacmba7k8d0p0f1p386ju.apps.googleusercontent.com.json'
+
 scopes = ['https://www.googleapis.com/auth/calendar']
-flow = InstalledAppFlow.from_client_secrets_file('<secret token file name>', scopes=scopes)
+flow = InstalledAppFlow.from_client_secrets_file(json_key_path, scopes=scopes)
 credentials = flow.run_local_server(port=8080)
-service = build('calendar', 'v3', credentials='<secret token file name>')
+
+service = build('calendar', 'v3', credentials=credentials)
 
 # Google Calendar ID (replace with your own calendar ID)
 calendar_id = 'primary'
@@ -55,8 +58,6 @@ def create_event(service, calendar_id, summary, due_date):
         },
     }
 
-# ENTER CRNS
-specific_course_ids = [];
 
 print("Finding courses...")
 print("-----------------------------")
@@ -103,7 +104,9 @@ result = courses_df.to_string(
 )
 print(result)
 
-# List to store assignments from specified courses
+# List of specific course IDs you want to retrieve assignments from
+specific_course_ids = [37714, 37709, 37676, 36886, 37681]  # Replace these with your desired course IDs
+
 # List to store assignments from specified courses
 assignments = []
 count = 0
