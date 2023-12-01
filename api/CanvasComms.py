@@ -55,6 +55,8 @@ def create_event(service, calendar_id, summary, due_date):
         },
     }
 
+# ENTER CRNS
+specific_course_ids = [];
 
 print("Finding courses...")
 print("-----------------------------")
