@@ -14,6 +14,8 @@ def collect_user_info():
     global reset_button
     global submit
     global crn_entries
+    global calendar_pathway_entry  # New entry widget for Google Calendar Pathway
+
 
     submit_button = None  # Initialize submit_button
     reset_button = None  # Initialize reset_button
@@ -39,6 +41,25 @@ def collect_user_info():
             crn_entry = tk.Entry(root)
             crn_entry.pack()
             crn_entries.append(crn_entry)
+
+        
+        # Clear previous Google Calendar Pathway entry field
+        calendar_pathway_entry.destroy()
+
+        # Create new CRN entry fields
+        crn_entries.clear()
+        for i in range(num_courses):
+            crn_label = tk.Label(root, text=f"CRN for Course {i + 1}:")
+            crn_label.pack()
+            crn_entry = tk.Entry(root)
+            crn_entry.pack()
+            crn_entries.append(crn_entry)
+
+        # Create new Google Calendar Pathway entry field
+        calendar_pathway_label = tk.Label(root, text="Google Calendar Pathway:")
+        calendar_pathway_label.pack()
+        calendar_pathway_entry = tk.Entry(root)
+        calendar_pathway_entry.pack()
 
         # Create the submit button if it doesn't exist
         if submit_button is None:
@@ -92,6 +113,7 @@ def collect_user_info():
         canvas_token = canvas_token_entry.get()
         num_courses = int(num_courses_var.get())
         crns = [entry.get() for entry in crn_entries]
+        google_calendar_pathway = calendar_pathway_entry.get()
         root.destroy()  # Closes window upon entry
 
         # Code added to send collected data into our database
@@ -143,7 +165,8 @@ def collect_user_info():
         print("Canvas Token:", canvas_token)
         print("Number of Courses:", num_courses)
         print("CRNs:", crns)
-
+        print("Google Calendar Pathway:", google_calendar_pathway)
+        
         # Calls CanvasComms, bringing over the token that was submitted
         # Canvas(canvas_token)
 
