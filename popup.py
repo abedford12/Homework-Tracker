@@ -77,7 +77,9 @@ def collect_user_info():
 
         # Pack the submit button after the CRN entry fields
         submit_button.pack(side=tk.TOP, anchor=tk.CENTER, pady=5)
-
+        
+    #TODO Add instructions for google pathway
+    
     # Canvas Instructions text
     instructions_text = """
     Steps for accessing Canvas API:
