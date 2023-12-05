@@ -10,8 +10,6 @@ conn_string = f"postgresql://{USERNAME}:{PASSWORD}@{HOST}/{NAME}"
 engine = create_engine(conn_string)
 BaseTable.metadata.create_all(bind=engine)
 
-engine = create_engine(conn_string)
-
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 router = APIRouter()
@@ -61,14 +59,13 @@ async def createUser(user: userCreate, session: Session = Depends(get_db)):
     return newUser
 
 
+# API that deletes a trip by its user id
 @router.delete("/{user_id}", response_model=str)
 async def deleteUser(user_id: int, session: Session = Depends(get_db)):
-    # Retrieve the Trip object by its ID
     userToDelete = session.query(User).filter(User.uid == user_id).first()
     if userToDelete:
-        # Delete the Trip object
         session.delete(userToDelete)
         session.commit()
-        return f"User {user_id} has now been deleted deleted."
+        return f"User with the following ID has been deleted: {user_id} "
     else:
         raise HTTPException(status_code=404, detail="User not found")

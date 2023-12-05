@@ -55,12 +55,10 @@ async def createAssignment(assignment: assignmentCreate, session: Session = Depe
 # API that deletes a assignment based on assignment id in the database
 @router.delete("/{assignment_id}", response_model=str)
 async def deleteCourse(assignment_id: int, session: Session = Depends(get_db)):
-    # Retrieve the Trip object by its ID
     assignmentDelete = session.query(Assignment).filter(Assignment.assignmentID == assignment_id).first()
     if assignmentDelete:
-        # Delete the Trip object
         session.delete(assignmentDelete)
         session.commit()
-        return f"Assignment {assignment_id} has now been deleted."
+        return f"Assignment with the following id has been deleted: {assignment_id}"
     else:
         raise HTTPException(status_code=404, detail="Assignment not found")

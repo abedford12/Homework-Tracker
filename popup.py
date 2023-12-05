@@ -2,6 +2,8 @@ import tkinter as tk
 
 import requests
 
+from CanvasComms import Canvas
+
 
 def collect_user_info():
     root = tk.Tk()
@@ -141,6 +143,9 @@ def collect_user_info():
         print("Canvas Token:", canvas_token)
         print("Number of Courses:", num_courses)
         print("CRNs:", crns)
+
+        # Calls CanvasComms, bringing over the token that was submitted
+        # Canvas(canvas_token)
 
     def reset():
         # Function to reset the page
