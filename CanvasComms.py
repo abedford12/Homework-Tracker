@@ -8,9 +8,9 @@ import requests
 import pandas as pd
 from builtins import input
 from datetime import datetime, timedelta
-#from google.oauth2.credentials import Credentials
-#from google_auth_oauthlib.flow import InstalledAppFlow
-#from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 def Canvas(canvas_token):
     # Static settings
@@ -55,8 +55,6 @@ def Canvas(canvas_token):
     course_state = 'available'
     enrollment_state = 'active'
     start_date = '2023-01-01T00:00:00Z'
-    #while not course_state in ['unpublished', 'available', 'completed', 'deleted']:
-        #course_state = input("Select a course state [unpublished, available, completed, deleted]:")
 
     # Your Google Calendar API setup
     json_key_path = '/Users/benutter/Downloads/client_secret_917639123664-80d60u1gg7dtacmba7k8d0p0f1p386ju.apps.googleusercontent.com.json'
@@ -70,96 +68,102 @@ def Canvas(canvas_token):
     # Google Calendar ID (replace with your own calendar ID)
     calendar_id = 'primary'
 
-    # Function to create a Google Calendar event
-    def create_event(service, calendar_id, summary, due_date):
-        event = {
-            'summary': summary,
-            'description': 'Assignment Due',
-            'start': {
-                'dateTime': due_date.isoformat(),
-                'timeZone': 'UTC',
-            },
-            'end': {
-                'dateTime': (due_date + timedelta(hours=1)).isoformat(),
-                'timeZone': 'UTC',
-            },
-        }
-
-
     print("Finding courses...")
     print("-----------------------------")
-    # continue to make requests until all data has been received
-    page = 1
-    courses = []
-    while True:
-        # request urls should always be based of the base url so they do not
-        # need to be changed when switching between test and production environments
-        request_url = BASE_URL + '/api/v1/courses'
-        params = {
-            "per_page": str(PER_PAGE),
-            "page": str(page),
-            "enrollment_state[]": [enrollment_state],
-            "state[]": [course_state],
-            "include[]": ['total_students']
-        }
-        r = requests.get(request_url, headers=auth_header, params=params)
 
-        # always take care to handle request errors
-        r.raise_for_status() # raise error if 4xx or 5xx
+# continue to make requests until all data has been received
+page = 1
+courses = []
+while True:
+    # request urls should always be based of the base url so they do not
+    # need to be changed when switching between test and production environments
+    request_url = BASE_URL + '/api/v1/courses'
+    params = {
+        "per_page": str(PER_PAGE),
+        "page": str(page),
+        "enrollment_state[]": [enrollment_state],
+        "state[]": [course_state],
+        "include[]": ['total_students']
+    }
+    r = requests.get(request_url, headers=auth_header, params=params)
 
-        data = r.json()
-        if len(data) == 0:
-            break
+    # always take care to handle request errors
+    r.raise_for_status() # raise error if 4xx or 5xx
 
-        courses += data
+    data = r.json()
+    if len(data) == 0:
+        break
 
-        print("Finished processing page: "+str(page))
-        page+=1
+    courses += data
 
-    if len(courses) == 0:
-        print("No courses found to report on.")
-        exit()
+    print("Finished processing page: "+str(page))
+    page+=1
 
-    # from here, a simple table is printed out
-    # using pandas for convenience
-    print("Report for "+str(len(courses)) + " courses.")
-    print("-----------------------------")
+if len(courses) == 0:
+    print("No courses found to report on.")
+    exit()
 
-    courses_df = pd.DataFrame(courses)
-    result = courses_df.to_string(
-        columns=['id', 'name', 'course_code', 'workflow_state', 'start_at', 'end_at', 'total_students']
-    )
-    print(result)
+# from here, a simple table is printed out
+# using pandas for convenience
+print("Report for "+str(len(courses)) + " courses.")
+print("-----------------------------")
 
-    # List of specific course IDs you want to retrieve assignments from
-    specific_course_ids = [37714, 37709, 37676, 36886, 37681]  # Replace these with your desired course IDs
+courses_df = pd.DataFrame(courses)
+result = courses_df.to_string(
+    columns=['id', 'name', 'course_code', 'workflow_state', 'start_at', 'end_at', 'total_students']
+)
+print(result)
 
-    # List to store assignments from specified courses
-    assignments = []
-    count = 0
+# List of specific course IDs you want to retrieve assignments from
+specific_course_ids = [37714, 37709, 37676, 36886, 37681]  # Replace these with your desired course IDs
 
-    # Iterate over the filtered courses
-    for course in specific_course_ids:
-        # Make a request to get assignments for the current course
-        assignments_url = BASE_URL + f'/api/v1/courses/{specific_course_ids[count]}/assignments'
-        assignments_params = {"per_page": str(PER_PAGE)}
-        assignments_request = requests.get(assignments_url, headers=auth_header, params=assignments_params)
-        assignments_request.raise_for_status()
+# List to store assignments from specified courses
+assignments = []
+count = 0
 
-        # Add assignments to the list
-        assignments = assignments_request.json()
+# Iterate over the filtered courses
+for course in specific_course_ids:
+    # Make a request to get assignments for the current course
+    assignments_url = BASE_URL + f'/api/v1/courses/{specific_course_ids[count]}/assignments'
+    assignments_params = {"per_page": str(PER_PAGE)}
+    assignments_request = requests.get(assignments_url, headers=auth_header, params=assignments_params)
+    assignments_request.raise_for_status()
+    
+    # Add assignments to the list
+    assignments = assignments_request.json()
+    
+    # Print the assignments
+    if assignments:
+        assignments_df = pd.DataFrame(assignments)
+        assignments_result = assignments_df.to_string(
+            columns=['id', 'name', 'due_at', 'points_possible']
+        )
+        print(f"Assignments for {specific_course_ids[count]}:")
+        print("-----------------------------")
+        print(assignments_result)
+        print("\n")
+        for index, assignment in assignments_df.iterrows():
+            assignment_name = assignment['name']
+            due_date_str = assignment['due_at']
+    
+            if due_date_str:
+                # Convert due_date_str to a datetime object
+                due_date = datetime.strptime(due_date_str, '%Y-%m-%dT%H:%M:%SZ')
+    
+                # Create an event in Google Calendar
+                event = {
+                    'summary': assignment_name,
+                    'description': f'Assignment due: {assignment_name}',
+                    'start': {'dateTime': due_date.isoformat(), 'timeZone': 'UTC'},
+                    'end': {'dateTime': (due_date + timedelta(hours=1)).isoformat(), 'timeZone': 'UTC'},
+                }
 
-        # Print the assignments
-        if assignments:
-            assignments_df = pd.DataFrame(assignments)
-            assignments_result = assignments_df.to_string(
-                columns=['id', 'name', 'due_at', 'points_possible']
-            )
-            print(f"Assignments for {specific_course_ids[count]}:")
-            print("-----------------------------")
-            print(assignments_result)
-            print("\n")
-        else:
-            print("No assignments found.")
+                # Insert the event
+                event = service.events().insert(calendarId='primary', body=event).execute()
 
-        count = count + 1
+                print(f'Event created: {event.get("htmlLink")}')
+            
+    else:
+        print("No assignments found.")
+
+    count = count + 1
