@@ -34,17 +34,9 @@ def collect_user_info():
             entry.destroy()
 
         # Create new CRN entry fields
-        crn_entries.clear()
-        for i in range(num_courses):
-            crn_label = tk.Label(root, text=f"CRN for Course {i + 1}:")
-            crn_label.pack()
-            crn_entry = tk.Entry(root)
-            crn_entry.pack()
-            crn_entries.append(crn_entry)
 
-        
         # Clear previous Google Calendar Pathway entry field
-        calendar_pathway_entry.destroy()
+        #calendar_pathway_entry.destroy()
 
         # Create new CRN entry fields
         crn_entries.clear()
