@@ -13,7 +13,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 
-def Canvas(canvas_token):
+def Canvas(canvas_token, crns):
     # Static settings
     # Using a base urls is useful for switching between test and production environments easily
     BASE_URL = 'https://sju.instructure.com'
@@ -114,7 +114,7 @@ def Canvas(canvas_token):
     print(result)
 
     # List of specific course IDs you want to retrieve assignments from
-    specific_course_ids = [37714, 37709, 37676, 36886, 37681]  # Replace these with your desired course IDs
+    specific_course_ids = crns  # Replace these with your desired course IDs
     specific_course_ids = userCRNInfo
     # List to store assignments from specified courses
     assignments = []
