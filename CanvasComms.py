@@ -115,7 +115,7 @@ def Canvas(canvas_token, google_calendar_pathway):
     print(result)
 
     # List of specific course IDs you want to retrieve assignments from
-    specific_course_ids = [37714, 37709, 37676, 36886, 37681]  # Replace these with your desired course IDs
+    specific_course_ids = [37714, 37709, 37676, 36886, 37681]   # Replace these with your desired course IDs
     specific_course_ids = userCRNInfo
     # List to store assignments from specified courses
     assignments = []
