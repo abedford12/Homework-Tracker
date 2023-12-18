@@ -83,6 +83,35 @@ def collect_user_info():
     canvas_instructions = tk.Label(root, text=instructions_text)
     canvas_instructions.pack()
 
+    #Google Path Instructions text
+    google_text = """
+    1. Search in your browser 'Google Cloud Console' and click on Google's link
+    2. Click on the 'Select a Project' button and change the organization at the top to sju.edu, then click 'NEW PROJECT'
+    3. Name the project 'Homework Tracker' and leave the location and organization as sju.edu, then create
+    4. Now navigate to the left side of your screen to 'API's and Services', then select your project. At the top hit '+ ENABLE APIS AND SERVICES'
+    5. Scroll down to the Google Calendar API, click on it and hit 'ENABLE'
+    6. Now hit 'CREATE CREDENTIALS' on the top left. Leave the API on Google Calendar and select 'Application data' and hit 'NEXT'
+    7. Name it the same as what you named the project then skip past the optional parts and finalize it
+    8. Now navigate to the 'Credentials' tab on the left side of your screen and create another credential by hitting the '+ CREATE CREDENTIALS' at the top of your screen
+    9. Click 'OAuth Client ID' and then hit 'Configure Consent Screen'
+    10. Make sure you click 'Internal' then create.
+    11. Type in the same project name you have been using into the 'App name' box and then use your school email in the following two mandatory boxes
+    12. Skip past the 'Scopes' page and finalize the consent screen.
+    13. Repeat step #8
+    14. Click 'OAuth Client ID' again and put the application type to Web Application and name it
+    15. Scroll down until you see Authorized URI's. You are going to want to make six. Make sure your six are:
+         https://calendar.google.com/calendar/u/0/r
+         https://calendar.google.com/calendar/u/0/r/
+         https://www.calendar.google.com/calendar/u/0/r
+         https://www.calendar.google.com/calendar/u/0/r/
+         http://localhost:8080/
+         http://localhost:8080
+    16. Once it's created you should get a pop-up confirming creation. At the bottom of that pop-up hit 'DOWNLOAD JSON'
+    17. Find that downloaded file in your downloads and copy the path of the file.
+    """
+    google_instructions = tk.Label(root, text=google_text)
+    google_instructions.pack()
+
     # Canvas Information
     canvas_token_label = tk.Label(root, text="Canvas Access Token:")
     canvas_token_label.pack()
