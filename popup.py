@@ -90,6 +90,7 @@ def collect_user_info():
 
     #Google Path Instructions text
     google_text = """
+    Steps for Google Path:
     1. Search in your browser 'Google Cloud Console' and click on Google's link
     2. Click on the 'Select a Project' button and change the organization at the top to sju.edu, then click 'NEW PROJECT'
     3. Name the project 'Homework Tracker' and leave the location and organization as sju.edu, then create
