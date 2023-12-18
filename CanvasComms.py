@@ -13,7 +13,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 
-def Canvas(canvas_token):
+def Canvas(canvas_token, google_calendar_pathway):
     # Static settings
     # Using a base urls is useful for switching between test and production environments easily
     BASE_URL = 'https://sju.instructure.com'
@@ -57,7 +57,8 @@ def Canvas(canvas_token):
 
     # Your Google Calendar API setup
     json_key_path = '/Users/benutter/Downloads/client_secret_917639123664-80d60u1gg7dtacmba7k8d0p0f1p386ju.apps.googleusercontent.com.json'
-    json_key_path = '/Users/woulv/Downloads/client_secret_499867656717-sii1um3p5eb9evc6pvlq5317l4diu02t.apps.googleusercontent.com'
+    #json_key_path = 'C:\\Users\\woulv\\Downloads\\client_secret_499867656717-sii1um3p5eb9evc6pvlq5317l4diu02t.apps.googleusercontent.com.json'
+    json_key_path = google_calendar_pathway
     scopes = ['https://www.googleapis.com/auth/calendar']
     flow = InstalledAppFlow.from_client_secrets_file(json_key_path, scopes=scopes)
     credentials = flow.run_local_server(port=8080)
@@ -128,41 +129,41 @@ def Canvas(canvas_token):
         assignments_request = requests.get(assignments_url, headers=auth_header, params=assignments_params)
         assignments_request.raise_for_status()
 
-    # Add assignments to the list
-    assignments = assignments_request.json()
+        # Add assignments to the list
+        assignments = assignments_request.json()
 
-    # Print the assignments
-    if assignments:
-        assignments_df = pd.DataFrame(assignments)
-        assignments_result = assignments_df.to_string(
-            columns=['id', 'name', 'due_at', 'points_possible']
-        )
-        print(f"Assignments for {specific_course_ids[count]}:")
-        print("-----------------------------")
-        print(assignments_result)
-        print("\n")
-        for index, assignment in assignments_df.iterrows():
-            assignment_name = assignment['name']
-            due_date_str = assignment['due_at']
+        # Print the assignments
+        if assignments:
+            assignments_df = pd.DataFrame(assignments)
+            assignments_result = assignments_df.to_string(
+                columns=['id', 'name', 'due_at', 'points_possible']
+            )
+            print(f"Assignments for {specific_course_ids[count]}:")
+            print("-----------------------------")
+            print(assignments_result)
+            print("\n")
+            for index, assignment in assignments_df.iterrows():
+                assignment_name = assignment['name']
+                due_date_str = assignment['due_at']
 
-            if due_date_str:
-                # Convert due_date_str to a datetime object
-                due_date = datetime.strptime(due_date_str, '%Y-%m-%dT%H:%M:%SZ')
+                if due_date_str:
+                    # Convert due_date_str to a datetime object
+                    due_date = datetime.strptime(due_date_str, '%Y-%m-%dT%H:%M:%SZ')
 
-                # Create an event in Google Calendar
-                event = {
-                    'summary': assignment_name,
-                    'description': f'Assignment due: {assignment_name}',
-                    'start': {'dateTime': due_date.isoformat(), 'timeZone': 'UTC'},
-                    'end': {'dateTime': (due_date + timedelta(hours=1)).isoformat(), 'timeZone': 'UTC'},
-                }
+                    # Create an event in Google Calendar
+                    event = {
+                        'summary': assignment_name,
+                        'description': f'Assignment due: {assignment_name}',
+                        'start': {'dateTime': due_date.isoformat(), 'timeZone': 'UTC'},
+                        'end': {'dateTime': (due_date + timedelta(hours=1)).isoformat(), 'timeZone': 'UTC'},
+                    }
 
-                # Insert the event
-                event = service.events().insert(calendarId='primary', body=event).execute()
+                    # Insert the event
+                    event = service.events().insert(calendarId='primary', body=event).execute()
 
-                print(f'Event created: {event.get("htmlLink")}')
+                    print(f'Event created: {event.get("htmlLink")}')
 
-    else:
-        print("No assignments found.")
+        else:
+            print("No assignments found.")
 
-    count = count + 1
+        count = count + 1

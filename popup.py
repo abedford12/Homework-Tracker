@@ -4,7 +4,6 @@ import requests
 
 from CanvasComms import Canvas
 
-
 def collect_user_info():
     root = tk.Tk()
     root.title("User Information Collection")
@@ -14,7 +13,9 @@ def collect_user_info():
     global reset_button
     global submit
     global crn_entries
-    global calendar_pathway_entry  # New entry widget for Google Calendar Pathway
+    global calendar_pathway_entry
+
+    # New entry widget for Google Calendar Pathway
 
 
     submit_button = None  # Initialize submit_button
@@ -27,6 +28,7 @@ def collect_user_info():
         global reset_button  # Reference the global variable
         global submit  # Reference the global variable
         global crn_entries  # Reference the global variable
+        global calendar_pathway_entry
         num_courses = int(num_courses_var.get())
 
         # Clear previous CRN entry fields
@@ -34,9 +36,6 @@ def collect_user_info():
             entry.destroy()
 
         # Create new CRN entry fields
-
-        # Clear previous Google Calendar Pathway entry field
-        #calendar_pathway_entry.destroy()
 
         # Create new CRN entry fields
         crn_entries.clear()
@@ -47,11 +46,17 @@ def collect_user_info():
             crn_entry.pack()
             crn_entries.append(crn_entry)
 
+        # Clear previous Google Calendar Pathway entry field
+
+
         # Create new Google Calendar Pathway entry field
         calendar_pathway_label = tk.Label(root, text="Google Calendar Pathway:")
         calendar_pathway_label.pack()
+        global calendar_pathway_entry
         calendar_pathway_entry = tk.Entry(root)
         calendar_pathway_entry.pack()
+
+
 
         # Create the submit button if it doesn't exist
         if submit_button is None:
@@ -162,7 +167,7 @@ def collect_user_info():
         print("Google Calendar Pathway:", google_calendar_pathway)
         
         # Calls CanvasComms, bringing over the token that was submitted
-        # Canvas(canvas_token)
+        Canvas(canvas_token, google_calendar_pathway)
 
     def reset():
         # Function to reset the page
